@@ -1,0 +1,391 @@
+# 📋 PROJECT PLAN: Tourist Attraction Search
+
+> **Project:** Frontend Skill Checkpoint - React Tourist Attraction Mini Project  
+> **Tech Stack:** React 18 + Vite + TailwindCSS  
+> **Last Updated:** Auto-generated
+
+---
+
+## 1. Project Structure
+
+```
+client/src/
+├── assets/               # Static assets (images, icons)
+├── components/           # UI Components (Presentational)
+│   ├── common/           # Reusable components
+│   │   └── Tag.jsx
+│   ├── layout/           # Layout components
+│   │   └── Header.jsx
+│   └── trip/             # Trip-related components
+│       ├── TripCard.jsx
+│       ├── TripGallery.jsx
+│       └── TripList.jsx
+├── hooks/                # Custom hooks (Logic)
+│   └── useTrips.js
+├── services/             # API services
+│   └── tripService.js
+├── utils/                # Utility functions
+│   └── clipboard.js
+├── App.jsx
+├── App.css
+├── main.jsx
+└── index.css             # Tailwind directives
+```
+
+### Design Principles
+- **UI อยู่ใน `components/`** - แยกตาม domain (trip, common, layout)
+- **Logic อยู่ใน `hooks/`** - แยก business logic ออกจาก UI
+- **API calls อยู่ใน `services/`** - Single point of API communication
+- **Utilities อยู่ใน `utils/`** - Pure functions ที่ reusable
+
+---
+
+## 2. Component Hierarchy
+
+### 2.1 Component Tree
+
+```
+App
+├── Header
+│   └── SearchInput (controlled input)
+└── TripList
+    └── TripCard (× n)
+        ├── TripGallery
+        │   ├── MainPhoto
+        │   └── Thumbnails (× 3)
+        ├── TripInfo
+        │   ├── Title (link)
+        │   ├── Description (truncated 100 chars)
+        │   └── ReadMoreLink
+        ├── TagList
+        │   └── Tag (× n)
+        └── CopyLinkButton (Optional)
+```
+
+### 2.2 Component Specifications
+
+| Component | หน้าที่ (SRP) | Props |
+|-----------|--------------|-------|
+| `App` | Root container, state holder | - |
+| `Header` | Layout wrapper สำหรับ search section | `searchText`, `onSearchChange` |
+| `SearchInput` | Controlled input field | `value`, `onChange`, `placeholder` |
+| `TripList` | Container สำหรับ render list of trips | `trips: Trip[]`, `onTagClick?` |
+| `TripCard` | Card container สำหรับ 1 trip | `trip: Trip`, `onTagClick?: (tag) => void` |
+| `TripGallery` | แสดง main photo + 3 thumbnails | `photos: string[]` |
+| `Tag` | Clickable tag badge | `label`, `onClick?` |
+| `CopyLinkButton` | ปุ่ม copy URL (Optional) | `url: string` |
+
+### 2.3 Data Type Reference
+
+```typescript
+interface Trip {
+  eid: string;
+  title: string;
+  description: string;
+  url: string;
+  photos: string[];   // photos[0] = main photo, photos[1-3] = thumbnails
+  tags: string[];
+}
+```
+
+---
+
+## 3. Logic Strategy
+
+### 3.1 State Management (App Level)
+
+```jsx
+// App.jsx - Single Source of Truth
+const [searchText, setSearchText] = useState('');  // ค่าใน input
+const [trips, setTrips] = useState([]);            // ผลลัพธ์จาก API
+const [isLoading, setIsLoading] = useState(false); // Loading state
+const [error, setError] = useState(null);          // Error state
+```
+
+### 3.2 Custom Hook: `useTrips`
+
+**Location:** `src/hooks/useTrips.js`
+
+**Purpose:** จัดการ fetching trips จาก API, handle loading/error states
+
+**Interface:**
+```javascript
+function useTrips(keyword) {
+  // Returns: { trips, isLoading, error }
+}
+```
+
+### 3.3 API Service
+
+**Location:** `src/services/tripService.js`
+
+**Endpoint:** `GET http://localhost:4001/trips?keywords=<search>`
+
+**Response Format:**
+```json
+{
+  "data": [
+    {
+      "eid": "1",
+      "title": "...",
+      "description": "...",
+      "url": "https://...",
+      "photos": ["url1", "url2", "url3", "url4"],
+      "tags": ["tag1", "tag2", ...]
+    }
+  ]
+}
+```
+
+### 3.4 Logic Flows
+
+**Search Flow:**
+```
+1. User พิมพ์ → onChange → setSearchText
+2. useEffect ดัก searchText → เรียก API
+3. API Response → setTrips
+4. TripList re-render
+```
+
+**Initial Load:**
+- เมื่อ `searchText === ''` → ส่ง `keywords=` (empty)
+- Server return all trips
+
+**Tag Click Flow (Optional):**
+```
+1. User คลิก Tag "เกาะ"
+2. onTagClick("เกาะ") → callback ส่งขึ้น App
+3. App: ตรวจสอบว่ามีคำนี้ใน searchText หรือยัง
+4. ถ้าไม่มี → append " เกาะ" ต่อท้าย searchText
+5. setSearchText triggers new search
+```
+
+### 3.5 Utility Functions
+
+| File | Function | Purpose |
+|------|----------|---------|
+| `services/tripService.js` | `searchTrips(keyword)` | Fetch API call |
+| `utils/clipboard.js` | `copyToClipboard(text)` | Copy text to clipboard |
+
+---
+
+## 4. Step-by-Step Execution Plan
+
+### Phase 1: Project Setup
+- [ ] สร้าง branch `feature/project-setup` จาก `dev`
+- [ ] ติดตั้ง TailwindCSS และ dependencies
+- [ ] สร้าง folder structure ตามที่ออกแบบ
+- [ ] Config Tailwind (tailwind.config.js, postcss.config.js)
+- [ ] เพิ่ม Tailwind directives ใน index.css
+- [ ] Commit: `chore: setup tailwind and project structure`
+- [ ] Merge to `dev`
+
+### Phase 2: UI Components (Static)
+- [ ] สร้าง branch `feature/ui-components` จาก `dev`
+- [ ] สร้าง `Header` component
+- [ ] สร้าง `SearchInput` component
+- [ ] สร้าง `Tag` component
+- [ ] สร้าง `TripGallery` component
+- [ ] สร้าง `TripCard` component
+- [ ] สร้าง `TripList` component
+- [ ] ทดสอบ UI ด้วย mock data
+- [ ] Commit: `feat: add UI components`
+- [ ] Merge to `dev`
+
+### Phase 3: API Integration
+- [ ] สร้าง branch `feature/api-integration` จาก `dev`
+- [ ] สร้าง `tripService.js` (API client)
+- [ ] สร้าง `useTrips` custom hook
+- [ ] เชื่อม hook กับ App component
+- [ ] ทดสอบ fetch data จาก server
+- [ ] Commit: `feat: add API integration and useTrips hook`
+- [ ] Merge to `dev`
+
+### Phase 4: Search Logic
+- [ ] สร้าง branch `feature/search-logic` จาก `dev`
+- [ ] Implement search input state binding
+- [ ] Implement debounce (optional) สำหรับ search
+- [ ] ทดสอบ search functionality
+- [ ] Commit: `feat: implement search functionality`
+- [ ] Merge to `dev`
+
+### Phase 5: Optional Features
+- [ ] สร้าง branch `feature/optional-features` จาก `dev`
+- [ ] Implement tag click → append to search
+- [ ] Implement copy link button
+- [ ] ทดสอบ optional features
+- [ ] Commit: `feat: add tag click and copy link features`
+- [ ] Merge to `dev`
+
+### Phase 6: Final
+- [ ] Review code quality (DRY, SRP, High Cohesion, Loose Coupling)
+- [ ] Test all features
+- [ ] Merge `dev` → `main`
+
+---
+
+## 5. Git Branch Strategy
+
+```
+main
+  └── dev
+       ├── feature/project-setup      (Phase 1)
+       ├── feature/ui-components      (Phase 2)
+       ├── feature/api-integration    (Phase 3)
+       ├── feature/search-logic       (Phase 4)
+       └── feature/optional-features  (Phase 5)
+```
+
+### Commit Message Format
+```
+<type>: <description>
+
+Types:
+- feat: New feature
+- fix: Bug fix
+- chore: Maintenance tasks
+- refactor: Code refactoring
+- style: Styling changes
+```
+
+---
+
+## 6. Quality Checklist
+
+### Code Quality Principles
+- [x] **DRY** - ไม่มี code ซ้ำซ้อน, ใช้ reusable components
+- [x] **SRP** - แต่ละ component มีหน้าที่เดียว
+- [x] **High Cohesion** - files จัดกลุ่มตาม domain
+- [x] **Loose Coupling** - components ไม่ depend กันมากเกินไป
+
+### Functional Requirements
+- [x] แสดงผล trips ทั้งหมดเมื่อเปิดเว็บ (empty search)
+- [x] Search input ค้นหา trips ได้
+- [x] แสดง Title, Description (≤100 chars), Photos, Tags
+- [x] Title เป็น link เปิด tab ใหม่
+- [x] ปุ่ม "อ่านต่อ" เปิด link ใน tab ใหม่
+- [x] แสดง Tags ของแต่ละ trip
+
+### Optional Requirements
+- [x] คลิก Tag → append to search input
+- [x] ไม่ซ้ำ tag ใน search input
+- [x] ปุ่ม Copy link ทำงานได้
+
+---
+
+## 7. Development Notes & Lessons Learned
+
+### Phase 1: Project Setup ✅
+
+**Actions:**
+- สร้าง Git branches: `main` → `dev` → `feature/project-setup`
+- ติดตั้ง TailwindCSS และ dependencies
+- สร้าง folder structure ตามแผน
+- Config `tailwind.config.js`, `postcss.config.js`, `index.css`
+
+**⚠️ Issue พบ:**
+| ปัญหา | สาเหตุ | วิธีแก้ |
+|-------|--------|--------|
+| TailwindCSS v4 ไม่ทำงานกับ Vite 4.1 | `npm install tailwindcss` ติดตั้ง v4 (latest) ซึ่งมี breaking changes - ต้องใช้ `@tailwindcss/postcss` และ `@import "tailwindcss"` แทน syntax เดิม | Downgrade เป็น `tailwindcss@3.4.1` |
+
+**💡 Lessons Learned:**
+- ควรระบุ version ชัดเจนเมื่อติดตั้ง packages: `npm install -D tailwindcss@3.4.1`
+- AI Agent มี training data cutoff อาจไม่รู้จัก syntax ใหม่ล่าสุด
+- ตรวจสอบ compatibility matrix ก่อนใช้ packages ร่วมกัน
+
+---
+
+### Phase 2: UI Components ✅
+
+**Actions:**
+- สร้าง branch `feature/ui-components`
+- สร้าง Components ทั้งหมด 6 ตัว:
+  - `Header.jsx` - Search section with title
+  - `Tag.jsx` - Clickable tag badge
+  - `CopyLinkButton.jsx` - Copy URL button with icon
+  - `TripGallery.jsx` - Main photo + 3 thumbnails
+  - `TripCard.jsx` - Card container
+  - `TripList.jsx` - List of TripCards
+- Update `App.jsx` with mock data
+- ทดสอบ UI ผ่าน dev server
+
+**Components Created:**
+```
+src/components/
+├── common/
+│   ├── Tag.jsx
+│   └── CopyLinkButton.jsx
+├── layout/
+│   └── Header.jsx
+└── trip/
+    ├── TripCard.jsx
+    ├── TripGallery.jsx
+    └── TripList.jsx
+```
+
+**💡 Lessons Learned:**
+- แยก components ตาม domain ช่วยให้ maintain ง่าย
+- ใช้ mock data ทดสอบ UI ก่อนเชื่อม API
+
+---
+
+### Phase 3: API Integration ✅
+
+**Actions:**
+- สร้าง `tripService.js` - API client สำหรับ fetch trips
+- สร้าง `useTrips.js` - Custom hook จัดการ state (trips, isLoading, error)
+- Update `App.jsx` - ใช้ useTrips แทน mock data
+- เพิ่ม Loading และ Error states ใน UI
+
+**Files Created:**
+```
+src/services/tripService.js  - searchTrips(keyword) function
+src/hooks/useTrips.js        - useTrips(keyword) hook
+```
+
+**💡 Lessons Learned:**
+- แยก API logic ออกจาก component ช่วยให้ test และ maintain ง่าย
+- Custom hook ช่วย encapsulate state management logic
+
+---
+
+### Phase 4: Search Logic ✅
+
+**Note:** Search logic ถูก implement ไปพร้อมกับ Phase 3
+- `useTrips(searchText)` จะ re-fetch เมื่อ searchText เปลี่ยน
+- API `/trips?keywords=` รองรับการค้นหาอยู่แล้ว
+
+---
+
+### Phase 5: Optional Features ✅
+
+**Actions:**
+- Verify Tag click → append to search (already in App.jsx)
+- Refactor Copy link button ให้ใช้ utility function
+- สร้าง `clipboard.js` utility
+
+**Files Created/Updated:**
+```
+src/utils/clipboard.js                    - copyToClipboard(text) function
+src/components/common/CopyLinkButton.jsx  - refactored to use utility
+```
+
+**Features:**
+- ✅ คลิก Tag → append เข้า search input (ไม่ซ้ำ)
+- ✅ Copy link button → copy URL ไป clipboard
+
+---
+
+## 8. Tech Stack Versions (Confirmed Working)
+
+| Package | Version | หมายเหตุ |
+|---------|---------|---------|
+| React | 18.2.0 | Stable |
+| Vite | 4.1.0 | Compatible with Tailwind v3 |
+| TailwindCSS | 3.4.1 | ⚠️ ไม่ใช้ v4 เพราะ breaking changes |
+| PostCSS | latest | - |
+| Autoprefixer | latest | - |
+
+---
+
+**🎯 Status: All Phases Complete - Ready for Final Review**
