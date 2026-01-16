@@ -171,56 +171,56 @@ function useTrips(keyword) {
 
 ## 4. Step-by-Step Execution Plan
 
-### Phase 1: Project Setup
-- [ ] สร้าง branch `feature/project-setup` จาก `dev`
-- [ ] ติดตั้ง TailwindCSS และ dependencies
-- [ ] สร้าง folder structure ตามที่ออกแบบ
-- [ ] Config Tailwind (tailwind.config.js, postcss.config.js)
-- [ ] เพิ่ม Tailwind directives ใน index.css
-- [ ] Commit: `chore: setup tailwind and project structure`
-- [ ] Merge to `dev`
+### Phase 1: Project Setup ✅
+- [x] สร้าง branch `feature/project-setup` จาก `dev`
+- [x] ติดตั้ง TailwindCSS และ dependencies
+- [x] สร้าง folder structure ตามที่ออกแบบ
+- [x] Config Tailwind (tailwind.config.js, postcss.config.js)
+- [x] เพิ่ม Tailwind directives ใน index.css
+- [x] Commit: `ecb83dd - feat: add project setup and UI components (Phase 1+2)`
+- [x] Merge to `dev`
 
-### Phase 2: UI Components (Static)
-- [ ] สร้าง branch `feature/ui-components` จาก `dev`
-- [ ] สร้าง `Header` component
-- [ ] สร้าง `SearchInput` component
-- [ ] สร้าง `Tag` component
-- [ ] สร้าง `TripGallery` component
-- [ ] สร้าง `TripCard` component
-- [ ] สร้าง `TripList` component
-- [ ] ทดสอบ UI ด้วย mock data
-- [ ] Commit: `feat: add UI components`
-- [ ] Merge to `dev`
+### Phase 2: UI Components (Static) ✅
+- [x] สร้าง branch `feature/ui-components` จาก `dev`
+- [x] สร้าง `Header` component
+- [x] สร้าง `SearchInput` component
+- [x] สร้าง `Tag` component
+- [x] สร้าง `TripGallery` component
+- [x] สร้าง `TripCard` component
+- [x] สร้าง `TripList` component
+- [x] ทดสอบ UI ด้วย mock data
+- [x] Commit: `ecb83dd - feat: add project setup and UI components (Phase 1+2)`
+- [x] Merge to `dev`
 
-### Phase 3: API Integration
-- [ ] สร้าง branch `feature/api-integration` จาก `dev`
-- [ ] สร้าง `tripService.js` (API client)
-- [ ] สร้าง `useTrips` custom hook
-- [ ] เชื่อม hook กับ App component
-- [ ] ทดสอบ fetch data จาก server
-- [ ] Commit: `feat: add API integration and useTrips hook`
-- [ ] Merge to `dev`
+### Phase 3: API Integration ✅
+- [x] สร้าง branch `feature/api-integration` จาก `dev`
+- [x] สร้าง `tripService.js` (API client)
+- [x] สร้าง `useTrips` custom hook
+- [x] เชื่อม hook กับ App component
+- [x] ทดสอบ fetch data จาก server
+- [x] Commit: `e70a078 - feat: add API integration and search logic (Phase 3+4)`
+- [x] Merge to `dev`
 
-### Phase 4: Search Logic
-- [ ] สร้าง branch `feature/search-logic` จาก `dev`
-- [ ] Implement search input state binding
-- [ ] Implement debounce (optional) สำหรับ search
-- [ ] ทดสอบ search functionality
-- [ ] Commit: `feat: implement search functionality`
-- [ ] Merge to `dev`
+### Phase 4: Search Logic ✅
+- [x] สร้าง branch `feature/search-logic` จาก `dev`
+- [x] Implement search input state binding
+- [x] Implement debounce (optional) สำหรับ search
+- [x] ทดสอบ search functionality
+- [x] Commit: `e70a078 - feat: add API integration and search logic (Phase 3+4)`
+- [x] Merge to `dev`
 
-### Phase 5: Optional Features
-- [ ] สร้าง branch `feature/optional-features` จาก `dev`
-- [ ] Implement tag click → append to search
-- [ ] Implement copy link button
-- [ ] ทดสอบ optional features
-- [ ] Commit: `feat: add tag click and copy link features`
-- [ ] Merge to `dev`
+### Phase 5: Optional Features ✅
+- [x] สร้าง branch `feature/optional-features` จาก `dev`
+- [x] Implement tag click → append to search
+- [x] Implement copy link button
+- [x] ทดสอบ optional features
+- [x] Commit: `6b4f339 - feat: add optional features - tag click and copy link (Phase 5)`
+- [x] Merge to `dev`
 
-### Phase 6: Final
-- [ ] Review code quality (DRY, SRP, High Cohesion, Loose Coupling)
-- [ ] Test all features
-- [ ] Merge `dev` → `main`
+### Phase 6: Final ✅
+- [x] Review code quality (DRY, SRP, High Cohesion, Loose Coupling)
+- [x] Test all features
+- [x] Merge `dev` → `main` (worktree limitation)
 
 ---
 
@@ -252,24 +252,24 @@ Types:
 
 ## 6. Quality Checklist
 
-### Code Quality Principles
-- [ ] **DRY** - ไม่มี code ซ้ำซ้อน, ใช้ reusable components
-- [ ] **SRP** - แต่ละ component มีหน้าที่เดียว
-- [ ] **High Cohesion** - files จัดกลุ่มตาม domain
-- [ ] **Loose Coupling** - components ไม่ depend กันมากเกินไป
+### Code Quality Principles ✅
+- [x] **DRY** - ไม่มี code ซ้ำซ้อน, ใช้ reusable components (Tag, CopyLinkButton)
+- [x] **SRP** - แต่ละ component มีหน้าที่เดียว (Header=layout, TripCard=display, TripGallery=photos)
+- [x] **High Cohesion** - files จัดกลุ่มตาม domain (common/, layout/, trip/)
+- [x] **Loose Coupling** - components ไม่ depend กันมากเกินไป (ส่ง props/callbacks)
 
-### Functional Requirements
-- [ ] แสดงผล trips ทั้งหมดเมื่อเปิดเว็บ (empty search)
-- [ ] Search input ค้นหา trips ได้
-- [ ] แสดง Title, Description (≤100 chars), Photos, Tags
-- [ ] Title เป็น link เปิด tab ใหม่
-- [ ] ปุ่ม "อ่านต่อ" เปิด link ใน tab ใหม่
-- [ ] แสดง Tags ของแต่ละ trip
+### Functional Requirements ✅
+- [x] แสดงผล trips ทั้งหมดเมื่อเปิดเว็บ (empty search)
+- [x] Search input ค้นหา trips ได้ (API integration)
+- [x] แสดง Title, Description (≤100 chars), Photos, Tags
+- [x] Title เป็น link เปิด tab ใหม่ (target="_blank")
+- [x] ปุ่ม "อ่านต่อ" เปิด link ใน tab ใหม่ (target="_blank")
+- [x] แสดง Tags ของแต่ละ trip
 
-### Optional Requirements
-- [ ] คลิก Tag → append to search input
-- [ ] ไม่ซ้ำ tag ใน search input
-- [ ] ปุ่ม Copy link ทำงานได้
+### Optional Requirements ✅
+- [x] คลิก Tag → append to search input (handleTagClick)
+- [x] ไม่ซ้ำ tag ใน search input (filter duplicate logic)
+- [x] ปุ่ม Copy link ทำงานได้ (clipboard.js utility)
 
 ---
 
