@@ -329,18 +329,50 @@ src/components/
 
 ---
 
-### Phase 3: API Integration ⏳
-*Pending...*
+### Phase 3: API Integration ✅
+
+**Actions:**
+- สร้าง `tripService.js` - API client สำหรับ fetch trips
+- สร้าง `useTrips.js` - Custom hook จัดการ state (trips, isLoading, error)
+- Update `App.jsx` - ใช้ useTrips แทน mock data
+- เพิ่ม Loading และ Error states ใน UI
+
+**Files Created:**
+```
+src/services/tripService.js  - searchTrips(keyword) function
+src/hooks/useTrips.js        - useTrips(keyword) hook
+```
+
+**💡 Lessons Learned:**
+- แยก API logic ออกจาก component ช่วยให้ test และ maintain ง่าย
+- Custom hook ช่วย encapsulate state management logic
 
 ---
 
-### Phase 4: Search Logic ⏳
-*Pending...*
+### Phase 4: Search Logic ✅
+
+**Note:** Search logic ถูก implement ไปพร้อมกับ Phase 3
+- `useTrips(searchText)` จะ re-fetch เมื่อ searchText เปลี่ยน
+- API `/trips?keywords=` รองรับการค้นหาอยู่แล้ว
 
 ---
 
-### Phase 5: Optional Features ⏳
-*Pending...*
+### Phase 5: Optional Features ✅
+
+**Actions:**
+- Verify Tag click → append to search (already in App.jsx)
+- Refactor Copy link button ให้ใช้ utility function
+- สร้าง `clipboard.js` utility
+
+**Files Created/Updated:**
+```
+src/utils/clipboard.js                    - copyToClipboard(text) function
+src/components/common/CopyLinkButton.jsx  - refactored to use utility
+```
+
+**Features:**
+- ✅ คลิก Tag → append เข้า search input (ไม่ซ้ำ)
+- ✅ Copy link button → copy URL ไป clipboard
 
 ---
 
@@ -356,4 +388,4 @@ src/components/
 
 ---
 
-**🎯 Status: Phase 2 Complete - Ready for Review**
+**🎯 Status: All Phases Complete - Ready for Final Review**

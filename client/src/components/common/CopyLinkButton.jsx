@@ -1,11 +1,8 @@
+import { copyToClipboard } from '../../utils/clipboard';
+
 function CopyLinkButton({ url }) {
   const handleCopy = () => {
-    const textField = document.createElement('textarea');
-    textField.innerText = url;
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand('copy');
-    textField.remove();
+    copyToClipboard(url);
   };
 
   return (
