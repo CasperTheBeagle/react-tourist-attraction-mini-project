@@ -326,6 +326,8 @@ src/components/
 **💡 Lessons Learned:**
 - แยก components ตาม domain ช่วยให้ maintain ง่าย
 - ใช้ mock data ทดสอบ UI ก่อนเชื่อม API
+- Component hierarchy: App → TripList → TripCard → (Gallery, TagList, CopyButton)
+- Props drilling ที่เหมาะสม: ส่ง callbacks ขึ้นไปที่ App level สำหรับ state management
 
 ---
 
@@ -346,6 +348,9 @@ src/hooks/useTrips.js        - useTrips(keyword) hook
 **💡 Lessons Learned:**
 - แยก API logic ออกจาก component ช่วยให้ test และ maintain ง่าย
 - Custom hook ช่วย encapsulate state management logic
+- useEffect dependency array: ใส่ `searchText` เพื่อ re-fetch เมื่อค้นหาใหม่
+- Error handling: try-catch ใน service layer, แสดง error state ใน UI
+- Loading states: สำคัญสำหรับ UX เมื่อ fetch ข้อมูลจาก API
 
 ---
 
@@ -374,6 +379,12 @@ src/components/common/CopyLinkButton.jsx  - refactored to use utility
 - ✅ คลิก Tag → append เข้า search input (ไม่ซ้ำ)
 - ✅ Copy link button → copy URL ไป clipboard
 
+**💡 Lessons Learned:**
+- Utility functions: สร้าง `clipboard.js` สำหรับ reusable logic
+- Event handling: คลิก tag ใช้ callback pattern ส่งขึ้น App level
+- DOM manipulation: ใช้ `document.execCommand('copy')` สำหรับ clipboard API
+- String manipulation: `split()`, `filter()`, `includes()` สำหรับ tag deduplication
+
 ---
 
 ## 8. Tech Stack Versions (Confirmed Working)
@@ -385,6 +396,29 @@ src/components/common/CopyLinkButton.jsx  - refactored to use utility
 | TailwindCSS | 3.4.1 | ⚠️ ไม่ใช้ v4 เพราะ breaking changes |
 | PostCSS | latest | - |
 | Autoprefixer | latest | - |
+
+### Overall Project Lessons Learned
+
+**🏗️ Architecture & Code Quality:**
+- **DRY Principle**: ใช้ Tag, CopyLinkButton ซ้ำในหลาย TripCard
+- **SRP**: แต่ละ component มีหน้าที่ชัดเจน (Header=layout, TripCard=display, TripGallery=photos)
+- **High Cohesion**: จัดกลุ่มตาม domain (common/, layout/, trip/)
+- **Loose Coupling**: ส่ง props/callbacks แทน direct state access
+
+**🔄 Git Workflow:**
+- Worktree mode: ไม่สามารถ checkout branches ที่ถูกใช้ใน main repository
+- Commit messages: ใช้ format `feat: description` ตาม conventional commits
+- Branch strategy: ใช้ feature branches แต่ merge ไม่ได้ใน worktree
+
+**🧪 Testing Strategy:**
+- Manual testing ใน browser preview
+- Test phases แยกกัน: UI → API → Features
+- Test edge cases: empty search, duplicate tags, error states
+
+**📚 Documentation:**
+- Development notes ใน PROJECT_PLAN.md ดีกว่าไฟล์แยก
+- บันทึก issues และ solutions ช่วยในอนาคต
+- Tech stack versions ที่ confirm ว่าใช้ได้
 
 ---
 
