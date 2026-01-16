@@ -68,21 +68,21 @@ npm start
 ```
 client/src/
 ├── components/
-│   ├── common/          # Reusable components
+│   ├── common/          # Reusable components (Tag, CopyLinkButton)
 │   │   ├── Tag.jsx
 │   │   └── CopyLinkButton.jsx
-│   ├── layout/          # Layout components
+│   ├── layout/          # Layout components (Header with SearchInput)
 │   │   └── Header.jsx
-│   └── trip/            # Trip-related components
+│   └── trip/            # Trip-related domain components
 │       ├── TripCard.jsx
 │       ├── TripGallery.jsx
 │       └── TripList.jsx
 ├── hooks/
-│   └── useTrips.js      # Custom hook for API
+│   └── useTrips.js      # Custom hook for fetching trips from API
 ├── services/
-│   └── tripService.js   # API client
+│   └── tripService.js   # API client layer
 ├── utils/
-│   └── clipboard.js     # Utility functions
+│   └── clipboard.js     # Utility functions (clipboard operations)
 └── App.jsx
 ```
 
@@ -144,6 +144,19 @@ GET http://localhost:4001/trips?keywords=<search>
 - ✅ Tag click appends to search
 - ✅ No duplicate tags in search
 - ✅ Copy link to clipboard
+
+---
+
+## 🚀 Future Improvements
+
+Potential enhancements for this project:
+
+- [ ] **Pagination/Infinite Scroll** - Handle large datasets efficiently
+- [ ] **Filter by Tag** - Dedicated tag filter UI beyond text search
+- [ ] **Unit Tests** - Add Jest/React Testing Library for component testing
+- [ ] **Dark Mode** - Theme switcher for better UX
+- [ ] **Favorites** - Save favorite trips to localStorage
+- [ ] **Share to Social Media** - Quick share buttons for Facebook, Twitter, Line
 
 ---
 

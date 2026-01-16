@@ -253,23 +253,23 @@ Types:
 ## 6. Quality Checklist
 
 ### Code Quality Principles
-- [x] **DRY** - ไม่มี code ซ้ำซ้อน, ใช้ reusable components
-- [x] **SRP** - แต่ละ component มีหน้าที่เดียว
-- [x] **High Cohesion** - files จัดกลุ่มตาม domain
-- [x] **Loose Coupling** - components ไม่ depend กันมากเกินไป
+- [ ] **DRY** - ไม่มี code ซ้ำซ้อน, ใช้ reusable components
+- [ ] **SRP** - แต่ละ component มีหน้าที่เดียว
+- [ ] **High Cohesion** - files จัดกลุ่มตาม domain
+- [ ] **Loose Coupling** - components ไม่ depend กันมากเกินไป
 
 ### Functional Requirements
-- [x] แสดงผล trips ทั้งหมดเมื่อเปิดเว็บ (empty search)
-- [x] Search input ค้นหา trips ได้
-- [x] แสดง Title, Description (≤100 chars), Photos, Tags
-- [x] Title เป็น link เปิด tab ใหม่
-- [x] ปุ่ม "อ่านต่อ" เปิด link ใน tab ใหม่
-- [x] แสดง Tags ของแต่ละ trip
+- [ ] แสดงผล trips ทั้งหมดเมื่อเปิดเว็บ (empty search)
+- [ ] Search input ค้นหา trips ได้
+- [ ] แสดง Title, Description (≤100 chars), Photos, Tags
+- [ ] Title เป็น link เปิด tab ใหม่
+- [ ] ปุ่ม "อ่านต่อ" เปิด link ใน tab ใหม่
+- [ ] แสดง Tags ของแต่ละ trip
 
 ### Optional Requirements
-- [x] คลิก Tag → append to search input
-- [x] ไม่ซ้ำ tag ใน search input
-- [x] ปุ่ม Copy link ทำงานได้
+- [ ] คลิก Tag → append to search input
+- [ ] ไม่ซ้ำ tag ใน search input
+- [ ] ปุ่ม Copy link ทำงานได้
 
 ---
 
@@ -326,6 +326,8 @@ src/components/
 **💡 Lessons Learned:**
 - แยก components ตาม domain ช่วยให้ maintain ง่าย
 - ใช้ mock data ทดสอบ UI ก่อนเชื่อม API
+- Component hierarchy: App → TripList → TripCard → (Gallery, TagList, CopyButton)
+- Props drilling ที่เหมาะสม: ส่ง callbacks ขึ้นไปที่ App level สำหรับ state management
 
 ---
 
@@ -346,6 +348,9 @@ src/hooks/useTrips.js        - useTrips(keyword) hook
 **💡 Lessons Learned:**
 - แยก API logic ออกจาก component ช่วยให้ test และ maintain ง่าย
 - Custom hook ช่วย encapsulate state management logic
+- useEffect dependency array: ใส่ `searchText` เพื่อ re-fetch เมื่อค้นหาใหม่
+- Error handling: try-catch ใน service layer, แสดง error state ใน UI
+- Loading states: สำคัญสำหรับ UX เมื่อ fetch ข้อมูลจาก API
 
 ---
 
@@ -374,6 +379,17 @@ src/components/common/CopyLinkButton.jsx  - refactored to use utility
 - ✅ คลิก Tag → append เข้า search input (ไม่ซ้ำ)
 - ✅ Copy link button → copy URL ไป clipboard
 
+**💡 Lessons Learned:**
+- Utility functions: สร้าง `clipboard.js` สำหรับ reusable logic
+- Event handling: คลิก tag ใช้ callback pattern ส่งขึ้น App level
+- DOM manipulation: ใช้ `document.execCommand('copy')` สำหรับ clipboard API
+- String manipulation: `split()`, `filter()`, `includes()` สำหรับ tag deduplication
+
+**⚡ Performance Optimization:**
+- useEffect dependency array: ใส่ `[keyword]` ใน `useTrips` เพื่อ re-fetch เฉพาะเมื่อ keyword เปลี่ยน
+- State management: แยก loading/error states ออกจาก data state (trips) เพื่อ re-render เฉพาะส่วนที่จำเป็น
+- Conditional rendering: ใช้ `{isLoading && ...}` แทน nested ternary เพื่อความชัดเจน
+
 ---
 
 ## 8. Tech Stack Versions (Confirmed Working)
@@ -385,6 +401,29 @@ src/components/common/CopyLinkButton.jsx  - refactored to use utility
 | TailwindCSS | 3.4.1 | ⚠️ ไม่ใช้ v4 เพราะ breaking changes |
 | PostCSS | latest | - |
 | Autoprefixer | latest | - |
+
+### Overall Project Lessons Learned
+
+**🏗️ Architecture & Code Quality:**
+- **DRY Principle**: ใช้ Tag, CopyLinkButton ซ้ำในหลาย TripCard
+- **SRP**: แต่ละ component มีหน้าที่ชัดเจน (Header=layout, TripCard=display, TripGallery=photos)
+- **High Cohesion**: จัดกลุ่มตาม domain (common/, layout/, trip/)
+- **Loose Coupling**: ส่ง props/callbacks แทน direct state access
+
+**🔄 Git Workflow:**
+- Worktree mode: ไม่สามารถ checkout branches ที่ถูกใช้ใน main repository
+- Commit messages: ใช้ format `feat: description` ตาม conventional commits
+- Branch strategy: ใช้ feature branches แต่ merge ไม่ได้ใน worktree
+
+**🧪 Testing Strategy:**
+- Manual testing ใน browser preview
+- Test phases แยกกัน: UI → API → Features
+- Test edge cases: empty search, duplicate tags, error states
+
+**📚 Documentation:**
+- Development notes ใน PROJECT_PLAN.md ดีกว่าไฟล์แยก
+- บันทึก issues และ solutions ช่วยในอนาคต
+- Tech stack versions ที่ confirm ว่าใช้ได้
 
 ---
 
