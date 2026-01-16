@@ -1,0 +1,10 @@
+﻿323545f - Mind Sathirasrindh - feat:init ex
+9fb754d - knotnapat - add validation on server
+589f4cb - Napat - refactor: create info dir
+0edcf08 - CasperTheBeagle - Cascade snapshot 2026-01-16T07:53:07.3275488Z
+ecb83dd - CasperTheBeagle - feat: add project setup and UI components (Phase 1+2)
+e70a078 - CasperTheBeagle - feat: add API integration and search logic (Phase 3+4)
+6b4f339 - CasperTheBeagle - feat: add optional features - tag click and copy link (Phase 5)
+c8aacd5 - CasperTheBeagle - docs: update README and complete quality checklist (Phase 6)
+59af710 - CasperTheBeagle - docs: add comprehensive lessons learned to PROJECT_PLAN.md
+4ede56e - CasperTheBeagle - docs: enhance documentation and fix conflict - Fixed Git conflict markers in App.jsx - Added Future Improvements section to README.md - Enhanced folder structure explanations with inline comments - Added Performance Optimization section to PROJECT_PLAN.md
